@@ -15,10 +15,17 @@ public class ProductController {
     private ProdutoService produtoService;
 
 
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Produto criarProduto(@RequestBody Produto produto){
         return  produtoService.salvar(produto);
+    }
+
+    @PostMapping("/carrinho")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void adicionarCarrinho(@RequestBody Produto produto){
+          produtoService.adicionarCarrinho(produto);
     }
 
 }
