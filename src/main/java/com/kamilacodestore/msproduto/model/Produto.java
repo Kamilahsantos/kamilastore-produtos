@@ -31,6 +31,9 @@ public class Produto {
         this.quantity = quantity;
     }
 
+    public Produto() {
+    }
+
     public String getProduct_id() {
         return product_id;
     }
