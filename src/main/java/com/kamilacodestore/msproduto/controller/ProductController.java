@@ -3,6 +3,8 @@ package com.kamilacodestore.msproduto.controller;
 
 import com.kamilacodestore.msproduto.model.Produto;
 import com.kamilacodestore.msproduto.service.ProdutoService;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,13 @@ public class ProductController {
     private ProdutoService produtoService;
 
 
+    Counter adicionarCarrinho;
+
+    public ProductController(MeterRegistry meterRegistry) {
+        adicionarCarrinho = Counter.builder("adionado_carrinho_counter")
+                .description("Produto adicionado ao carrinho")
+                .register(meterRegistry);
+    }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
@@ -26,7 +35,9 @@ public class ProductController {
 
     @PostMapping("/carrinho")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+
     public void adicionarCarrinho(@RequestBody Produto produto){
+        adicionarCarrinho.increment();
           produtoService.adicionarCarrinho(produto);
     }
 
